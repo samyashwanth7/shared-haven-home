@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Room } from "@/types";
@@ -8,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Home, DollarSign, Loader2 } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const UserDashboard: React.FC = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -17,7 +17,6 @@ const UserDashboard: React.FC = () => {
   useEffect(() => {
     const fetchUserRooms = async () => {
       try {
-        // Fetch user's rooms
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
           navigate('/');
@@ -59,7 +58,6 @@ const UserDashboard: React.FC = () => {
 
         if (error) throw error;
 
-        // Transform the data to match the Room type
         const roomsData = userRooms.map(ur => {
           const roomData = ur.rooms;
           return {
@@ -83,12 +81,12 @@ const UserDashboard: React.FC = () => {
               title: exp.title,
               amount: exp.amount,
               paidBy: exp.paid_by,
-              sharedWith: [], // To be implemented
+              sharedWith: [],
               date: new Date(exp.date),
               category: exp.category || undefined,
               settled: exp.settled
             })),
-            chores: [] // Default empty chores array as it's not being fetched here
+            chores: []
           } as Room;
         });
         
@@ -109,17 +107,20 @@ const UserDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="h-10 w-10 animate-spin text-roomie-teal" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <div className="container mx-auto px-4 py-8 flex-1">
-        <h1 className="text-3xl font-bold mb-6">My Dashboard</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">My Dashboard</h1>
+          <ThemeToggle />
+        </div>
         
         {rooms.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg shadow">

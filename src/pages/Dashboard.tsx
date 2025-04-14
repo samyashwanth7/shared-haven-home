@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import RoomDashboard from "@/components/RoomDashboard";
 import { toast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -99,7 +100,7 @@ const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-3">
           <Loader2 className="h-10 w-10 animate-spin mx-auto text-roomie-teal" />
           <div className="text-lg font-medium">Loading your room...</div>
@@ -114,9 +115,13 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <div className="container mx-auto px-4 py-8 flex-1">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex-1"></div> {/* Spacer */}
+          <ThemeToggle />
+        </div>
         <RoomDashboard room={room} onRoomUpdate={setRoom} />
       </div>
     </div>
